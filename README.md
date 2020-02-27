@@ -13,3 +13,15 @@
   3.Test stationarity of time series
   
   4.Standardize the dataset
+  
+* We have two binary outcomes that we want to classify with certain variables. Here we will summarize our approach to predict recessions with machine learning algorithms.
+
+  *We will perform feature selection before making our forecasts. We will use  𝐿1  regularized logistic regression for that purpose.
+
+  *Separate dataset into training and validation datasets. Split based dataset based on time: the period over 1960-1996 is selected for training and the period over 1996-2018 is kept for validation
+
+  *Evaluate performances of the machine learning algorithms on training dataset with cross validation (CV). Since we have time series structure we will use a special type of CV function in Python,TimeSeriesSplit. We will use Receiver operating characteristic (ROC) as scoring metric in our models. Related Python functions for this metric are roc_auc_score and roc_curve.
+
+  *Select the best performing models based on average accuracy and standard deviation of the CV results. We will take logistic regression as a benchmark model since this is the traditional method has been used to approach this problem.
+
+  *Then we make predictions on the validation dataset with selected models. First, we use GridSearchCV for selected model on training dataset to find best combination of parameters for the model. Then we evaluate the model on validation dataset and report accuracy metrics and feature importance results.
