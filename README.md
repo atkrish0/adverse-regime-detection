@@ -6,7 +6,10 @@
 
 *The following steps are taken to clean the data and make it ready for feature selection process.
 
-  *Remove the variables with missing observations
-  *Add lags of the variables as additional features
-  *Test stationarity of time series
-  *Standardize the dataset
+  1.Remove the variables with missing observations
+  
+  2.Add lags of the variables as additional features
+  
+  3.Test stationarity of time series
+  
+  4.Standardize the dataset
