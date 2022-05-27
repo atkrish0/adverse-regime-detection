@@ -1,5 +1,5 @@
-#load libraries
-# to check unit root in time series
+# check unit roots in time series
+
 import datetime
 from statsmodels.tsa.stattools import adfuller
 from sklearn.preprocessing import StandardScaler
@@ -37,7 +37,7 @@ Recession_periods = pd.read_csv('Recession_Periods.csv')
 bigmacro.insert(loc=1, column="Regime",
                 value=Recession_periods['Regime'].values)
 
-#remove columns with missing observations
+# remove columns with missing observations
 missing_colnames = []
 for i in bigmacro.drop(['Date', 'Regime'], axis=1):
     observations = len(bigmacro)-bigmacro[i].count()
@@ -61,7 +61,7 @@ bigmacro["Regime"] = bigmacro["Regime"].shift(-1)
 
 bigmacro = bigmacro.dropna(axis=0)
 
-#check stationarity
+# check stationarity
 threshold = 0.01  # significance level
 for column in bigmacro.drop(['Date', 'Regime'], axis=1):
     result = adfuller(bigmacro[column])
@@ -69,7 +69,7 @@ for column in bigmacro.drop(['Date', 'Regime'], axis=1):
         bigmacro[column] = bigmacro[column].diff()
 bigmacro = bigmacro.dropna(axis=0)
 
-# Standardize
+# standardize
 features = bigmacro.drop(['Date', 'Regime'], axis=1)
 col_names = features.columns
 
@@ -84,7 +84,7 @@ df.insert(loc=1, column='Regime', value=bigmacro['Regime'].values)
 Label = df["Regime"].apply(lambda regime: 1. if regime == 'Normal' else 0.)
 df.insert(loc=2, column="Label", value=Label.values)
 
-# Time Series Split
+# time Series Split
 df_idx = df[df.Date == '12/1/96'].index[0]
 
 df_targets = df['Label'].values
@@ -106,11 +106,11 @@ scoring = "roc_auc"
 kfold = model_selection.TimeSeriesSplit(n_splits=3)
 seed = 8
 
-# Create regularization hyperparameter space
+# create regularization hyperparameter space
 C = np.reciprocal([0.00000001, 0.00000005, 0.0000001, 0.0000005, 0.000001, 0.000005, 0.00001, 0.00005,
                    0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000])
 
-# Create hyperparameter options
+# create hyperparameter options
 hyperparameters = dict(C=C)
 
 model = LogisticRegression(max_iter=10000, penalty='l1')
@@ -118,7 +118,6 @@ LR_penalty = model_selection.GridSearchCV(estimator=model, param_grid=hyperparam
                                           cv=kfold, scoring=scoring).fit(X=df_features,
                                                                          y=df_targets).best_estimator_
 
-LR_penalty
 
 X = df_features
 y = df_targets
@@ -139,10 +138,10 @@ sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool),
             cmap=sns.diverging_palette(220, 10, as_cmap=True), square=True)
 
 
-# Training Algorithms on Training Dataset
+# training Algorithms on Training Dataset
 df = df_2
 
-# Time Series Split
+# time Series Split
 df_idx = df[df.Date == '12/1/96'].index[0]
 
 df_targets = df['Label'].values
@@ -207,7 +206,7 @@ plt.boxplot(results)
 ax.set_xticklabels(names)
 plt.show()
 
-# Evaluate Performances of the Algorithms on Validation Dataset
+# evaluate Performances of the Algorithms on Validation Dataset
 model = LogisticRegression(C=1e09)  # high penalty
 LR = model.fit(df_training_features, df_training_targets)
 training_predictions = LR.predict(df_training_features)
@@ -216,7 +215,8 @@ prob_predictions = np.append(prob_predictions, LR.predict_proba(df_validation_fe
 
 # define periods of recession
 rec_spans = []
-#rec_spans.append([datetime.datetime(1957,8,1), datetime.datetime(1958,4,1)])
+
+# rec_spans.append([datetime.datetime(1957,8,1), datetime.datetime(1958,4,1)])
 rec_spans.append([datetime.datetime(1960, 4, 1),datetime.datetime(1961, 2, 1)])
 rec_spans.append([datetime.datetime(1969, 12, 1),datetime.datetime(1970, 11, 1)])
 rec_spans.append([datetime.datetime(1973, 11, 1),datetime.datetime(1975, 3, 1)])
@@ -237,14 +237,14 @@ plt.title('Recession Prediction Probabalities with Logistic Regression')
 mp.savefig('plot1.png',  bbox_inches='tight')
 plt.show()
 
-# Create regularization penalty space
+# create regularization penalty space
 penalty = ['l1', 'l2']
 
-# Create regularization hyperparameter space
+# create regularization hyperparameter space
 C = np.reciprocal([0.00000001, 0.00000005, 0.0000001, 0.0000005, 0.000001, 0.000005, 0.00001, 0.00005,
                    0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000, 5000])
 
-# Create hyperparameter options
+# create hyperparameter options
 hyperparameters = dict(C=C, penalty=penalty)
 
 model = LogisticRegression(max_iter=10000)
