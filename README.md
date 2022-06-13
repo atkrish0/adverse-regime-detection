@@ -1,7 +1,7 @@
 # regime-detection
 
 ### Dataset: 
-Big Macroeconomic dataset from FRED St. Louis desiged by McCracken and Ng (2015).
+Macroeconomic dataset from FRED St. Louis desiged by McCracken and Ng (2015).
 Involves 129 macroeconomic monthly time series data from 1959 to 2018.
 8 Categories: Output and income, labor maket, housing, consumption, orders and inventories, money and credit, interest and exchange rate, prices in the stock market.
 
