@@ -1,4 +1,4 @@
-# regime-detection
+# adverse-regime-detection
 
 ### Dataset: 
 Macroeconomic dataset from FRED St. Louis desiged by McCracken and Ng (2015).
